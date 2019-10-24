@@ -5,7 +5,40 @@ The goal of this adventure is to better understand Cats and to contribute to it.
 
 # Determining test coverage
 
-Cats uses Scoverage to determine the test coverage, and Codecov to generate nice colorful reports.
+Cats uses Scoverage to determine the test coverage, and Codecov to generate nice colorful reports. It turns out that these reports are not accurate, however. Codecov uses line coverage, while Scoverage uses statement coverage. Whenever one statement on a line has been covered, Codecov considers the whole line covered.
+
+My first task was to adjust the Scoverage report in such a way that it does not only show which statements are covered, but also _by which test classes_. This makes it easier to improve on existing tests. For this purpose, I created two pull requests:
+
+- [scoverage / sbt-coverage, PR #297](https://github.com/scoverage/sbt-scoverage/pull/297)
+- [scoverage / scalac-scoverage-plugin, PR #282](https://github.com/scoverage/scalac-scoverage-plugin/pull/282)
+
+> *How does Scoverage work?* Scoverage consists of a compiler plugin that does two things at compile time: (1) it generates a file with metadata about each statement in the codebase, assigning a unique number to each statement; (2) it adds an `invoke` method to each statement that is invoked when the statement is executed at runtime. Whenever a statement is executed at runtime, the accomopanying `invoke` method is called and writes the statement id to a second file. The new feature I made, adds the test identifier as well. Since it is impossible to determine which class in the stack trace is the test class, I use the heuristic that classnames ending in 'Test', 'Spec', or 'Suite' are tests.
+
+The new feature can - as long as it has not been merged and released - used by taking the following steps:
+1. Clone the [scalac-scoverage-plugin](https://github.com/vincentdehaan/scalac-scoverage-plugin) repository and checkout the `feature/report-test-names` branch.
+2. Run `sbt publishLocal`.
+3. Clone the [sbt-scoverage](https://github.com/vincentdehaan/sbt-scoverage) repository and checkout the `feature/report-test-names` branch.
+4. Go to `sbt-coverage/src/main/scala/scoverage/ScoverageSbtPlugin.scala` and change `val DefaultScoverageVersion` to `1.4.1-SNAPSHOT`.
+5. Run `sbt publishLocal`.
+6. Change the Scoverage version in `plugins.sbt` in the target project to `1.6.1-SNAPSHOT`.
+
+TODOTODO
+
+# Improving test coverage on `Composed.scala`
+
+`Composed.scala` lacks tests for the following statements:
+- TODOTODO
+
+# Checklists
+
+## Implicit resolution
+
+Problem: IntelliJ complains about an inresolvable implicit
+
+Solution:
+1. Try to compile. It is possible that IntelliJ is too strict.
+2. Fill in the implicits manually.
+- If you don't know how, find a working example and compile using `-Xprint:typer`. Then the compiler works out the implicits.
 
 # Open questions
 
