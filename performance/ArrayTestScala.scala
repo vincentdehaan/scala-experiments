@@ -15,5 +15,8 @@ object ArrayTestScala extends App {
     val t1 = System.nanoTime
     println(map2)
     val t2 = System.nanoTime
+    println(map2)
+    val t3 = System.nanoTime
     println((t2 - t1) / 1000)
+    println((t3 - t2) / 1000)
 }
