@@ -48,9 +48,20 @@ Let's look at some more results (average over three consecutive runs):
 
 It turns out that the Scala code is much more dependent on the positive effects of method inlining. This is in accordance with our earlier explanation. 
 
-The time difference can even be fully explained by the incidental cost of inlining. When running `map2` twice in the same session, the difference vanishes completely:
+The time difference can even be fully explained by the initial cost of inlining. When running `map2` twice in the same session (Git commit `4bde5f`), the difference vanishes completely:
 
 | . | Scala |
 | --- | --- |
-| first run | 14.571 ms |
-| second run | 9.412 ms |
+| First run | 14.571 ms |
+| Second run | 9.412 ms |
+
+# How about `map`?
+
+The previous example can also be implemented in Scala using `map`. What would be the effect on performance? For a fair comparison, we will need to bring the initialization of `arr2` into scope of the benchmark, since `map` performs this initialization as well.
+
+| . | Java | Scala `while` | Scala `map` |
+| --- | --- | --- | --- |
+| Regular | 24.465 ms | 29.024 ms | 124.60 ms |
+| Second run | - | 24.362 ms | 110.47 ms |
+
+The result is disastrous. Let's look at the bytecode of `map`:
