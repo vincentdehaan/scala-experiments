@@ -64,4 +64,37 @@ The previous example can also be implemented in Scala using `map`. What would be
 | Regular | 24.465 ms | 29.024 ms | 124.60 ms |
 | Second run | - | 24.362 ms | 110.47 ms |
 
-The result is disastrous. Let's look at the bytecode of `map`:
+The result is disastrous. Let's look at the bytecode of `map` (`scala.collection.ArrayOps.map$extension`, Scala 2.13.1):
+
+```
+88: iload         5
+90: iload         15
+92: if_icmpge     508
+95: getstatic     #153                // Field scala/runtime/ScalaRunTime$.MODULE$:Lscala/runtime/ScalaRunTime$;
+98: aload         4
+100: iload         5
+102: aload_2
+103: aload         7
+105: iload         5
+107: iaload
+108: invokestatic  #806                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+111: invokeinterface #372,  2          // InterfaceMethod scala/Function1.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+116: invokevirtual #627                // Method scala/runtime/ScalaRunTime$.array_update:(Ljava/lang/Object;ILjava/lang/Object;)V
+119: iload         5
+121: iconst_1
+122: iadd
+123: istore        5
+125: goto          88
+```
+
+A number of things stand out:
+- The new element is added to the array using the method `scala.runtime.ScalaRuntime.array_update`. This method performs additional logic (pattern matching and casting), so even if it could be inlined - which is not likely due to its size - it is inefficient.
+- The function passed to `map` is implemented as an object that implements the `Function1` trait/interface. If there is more than one instance of `Function1` in the application (which is highly likely in a common Scala application), the compiler will probably not be able to perform speculative compilation. TODO: can we show this?
+- Additional casting is performed. This is necessary to undo the effect of the pattern match which has apparently some performance advantage. See the [commit message](https://github.com/scala/scala/commit/efa562bf3c1931ded3008e10e2134c6ec0572683). However, it seems to be possible to omit the class cast as follows (I did not test if this is an improvement):
+```scala
+// old: 
+case xs: Array[AnyRef]  => while (i < len) { ys(i) = f(xs(i).asInstanceOf[AnyRef]); i = i+1 }
+// new:
+case _: Array[AnyRef]  => while (i < len) { ys(i) = f(xs(i)); i = i+1 }
+```
+- Another difference is that `map` uses a local variable to store the new array, whereas my previous examples use a class scoped variable, which is implemented by a getter method. It is unclear if this causes a performance difference.
