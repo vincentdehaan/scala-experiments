@@ -22,12 +22,36 @@ The new feature can - as long as it has not been merged and released - used by t
 5. Run `sbt publishLocal`.
 6. Change the Scoverage version in `plugins.sbt` in the target project to `1.6.1-SNAPSHOT`.
 
+## `Apply.scala` is barely touched by Scoverage
+
+On some occasions, for example in `Apply.scala`, the HTML report of Scoverage does not color the statements properly. This seems to be caused by the fact that in the instrumentation data, the statement starts and ends at the same position. It is unclear when this occurs. It is likely that this problem is not caused by Scoverage, but by the compiler.
+
+# What is *?
+
 TODOTODO
 
 # Improving test coverage on `Composed.scala`
 
 `Composed.scala` lacks tests for the following statements:
-- TODOTODO
+- line 17: `G.imap(gb)(g)(f)`
+- line 123: `G.contramap(fb)(f)`
+- line 171: `(G.map(g)(_._1), G.map(g)(_._2))` (Only this one is recognized by the Codecov report.)
+- line 188: `G.map(gb)(g)`
+- line 196: `G.contramap(gb)(f)`
+
+# Improving test coverage on `Parallel.scala`
+
+`Parallel.scala` lacks tests for the following statements:
+- line 37: `Parallel.parMap2(ma, mb)((_, b) => b)(this)`
+- line 40: `parProductR(ma)(mb)`
+- line 47: `Parallel.parMap2(ma, mb)((a, _) => a)(this)`
+- line 50: `parProdutL(ma)(mb)`
+- line 103: `applicative.unlessA(cond)(f)`
+- line 105: `applicative.whenA(cond)(f)`
+- line 185: `P.sequential(UnorderedTraverse[T].unorderedTraverse(ta)(a => P.parallel(f(a))))`
+- line 190: `parUnorderedTraverse[T, M, F, M[A], A](ta)(Predef.identity)`
+- line 195: `P.monad.map(parUnorderedTraverse[T, M, F, A, T[B]](ta)(f))(FlatMap[T].flatten)`
+- line 200: `parUnorderedFlatTraverse[T, M, F, M[T[A]], A](ta)(Predef.identity)`
 
 # Checklists
 
@@ -39,6 +63,10 @@ Solution:
 1. Try to compile. It is possible that IntelliJ is too strict.
 2. Fill in the implicits manually.
 - If you don't know how, find a working example and compile using `-Xprint:typer`. Then the compiler works out the implicits.
+
+## Scala version compatibility
+
+TODO
 
 # Open questions
 
