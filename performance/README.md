@@ -1,7 +1,7 @@
 Scala vs Java performance
 ===
 
-# A motivating example
+## A motivating example
 
 See `ArrayTestJava` and `ArrayTestScala` (Git commit `3898d1`). The Java version is considerably (+- 40%) faster. Compare the bytecode of the `map2` method:
 
@@ -55,7 +55,7 @@ The time difference can even be fully explained by the initial cost of inlining.
 | First run | 14.571 ms |
 | Second run | 9.412 ms |
 
-# How about `map`?
+## How about `map`?
 
 The previous example can also be implemented in Scala using `map`. What would be the effect on performance? For a fair comparison, we will need to bring the initialization of `arr2` into scope of the benchmark, since `map` performs this initialization as well.
 
