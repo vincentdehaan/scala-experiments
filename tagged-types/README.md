@@ -28,6 +28,8 @@ def requireName(n: Name): String = ???
 requireName("Just a string literal")
 ```
 
+NOTE: it seems that this requirement basically undoes the whole idea of tagged types since this will also apply to variables (because of referential transparancy).
+
 (2) A variable of an untagged type can __not__ be substituted on a place where a corresponding tagged type is expected:
 ```scala
 def requireName(n: Name): String = ???
@@ -35,7 +37,7 @@ val str: String = "This is a string"
 requireName(str) // This yields a type error
 ```
 
-(3) A variable of a tagged type can be substituted on a place where a corresponding untagged type is expected:
+(3) Automatic downcast: a variable of a tagged type can be substituted on a place where a corresponding untagged type is expected:
 ```scala
 def requireString(s: String): String = ???
 val name: Name = "Joe"

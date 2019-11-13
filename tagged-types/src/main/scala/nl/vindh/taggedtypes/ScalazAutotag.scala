@@ -2,7 +2,7 @@ package nl.vindh.taggedtypes
 
 import scalaz.{@@, Tag}
 
-object ScalazAutotag {
+object ScalazAutotag extends App {
   sealed trait NameTag
   sealed trait AgeTag
 
@@ -15,7 +15,7 @@ object ScalazAutotag {
   def requireString(s: String): String = s
   def requireInt(i: Int): Int = i
   def requireName(n: Name): String = n.toString
-  def requireAge(a: Age): Int = untag[Int, AgeTag](a)
+  def requireAge(a: Age): Int = a
 
   val name: Name = "Joe"
   val age: Age = 30
