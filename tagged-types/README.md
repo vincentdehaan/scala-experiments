@@ -4,9 +4,9 @@ The goal of this project is to research different ways to implement type tagging
 
 | . | type alias | Scalaz | Scalaz + AutoTag | Shapeless |
 | --- | --- | --- | --- | --- |
-| Type checking | Yes | Yes | Yes | ? |
-| Non-automatic upcasting | No | Yes | Yes | ? |
-| Automatic downcasting | Yes | No | Yes | ? |
+| Type checking | Yes | Yes | Yes | Yes |
+| Non-automatic upcasting | No | Yes | Yes | Yes |
+| Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes |
 | Performance | ? | ? | ? | ? |
 | Type inference in common IDEs (IntelliJ/Eclipse) | ? | ? | ? | ? |
 | Informative compiler errors in case of a type error | ? | ? | ? | ? |

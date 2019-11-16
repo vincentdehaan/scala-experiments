@@ -1,24 +1,19 @@
 package nl.vindh.taggedtypes
 
-import scalaz.{@@, Tag}
+import shapeless.tag
+import shapeless.tag.@@
 
-object ScalazAutotag extends App {
-  sealed trait NameTag
-  sealed trait AgeTag
-
-  type Name = String @@ NameTag
-  type Age = Int @@ AgeTag
-
-  implicit def tag[A, Tag](untagged: A): A @@ Tag = Tag[A, Tag](untagged)
-  implicit def untag[A, Tag](tagged: A @@ Tag): A = tagged.asInstanceOf[A]
+object ShapelessTagged extends App {
+  trait NameTag
+  trait AgeTag
 
   def requireString(s: String): String = s
   def requireInt(i: Int): Int = i
-  def requireName(n: Name): String = n.toString
-  def requireAge(a: Age): Int = a
+  def requireName(n: String @@ NameTag): String = n
+  def requireAge(a: Int @@ AgeTag): Int = a
 
-  val name: Name = "Joe"
-  val age: Age = 30
+  val name: String @@ NameTag = tag[NameTag][String]("Joe")
+  val age: Int @@ AgeTag = tag[AgeTag][Int](30)
   val str: String = "String"
   val int: Int = 12
 
@@ -27,11 +22,10 @@ object ScalazAutotag extends App {
   requireAge(age)
 
   // (2) Non-automatic upcasting: a variable of an untagged type can __not__ be substituted on a place where a corresponding tagged type is expected:
-  requireName(str) // This should not compile, but it does because of implicit def tag
-  requireAge(int) // This should not compile, but it does
+  //requireName(str) // This should not compile
+  //requireAge(int) // This should not compile
 
   // (3) Automatic downcasting: a variable of a tagged type can be substituted on a place where a corresponding untagged type is expected:
   requireString(name)
-  requireInt(age)
-
+  println(requireInt(age))
 }

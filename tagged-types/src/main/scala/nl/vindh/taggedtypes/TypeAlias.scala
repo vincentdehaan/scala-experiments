@@ -14,19 +14,15 @@ object TypeAlias extends App {
   val str: String = "String"
   val int: Int = 12
 
-  // (1) The a literal of the untagged type may be substituted on a place where a corresponding tagged type is expected:
-  requireName("Joe")
-  requireAge(30)
+  // (1) Type checking: on a place where a tagged type is expected, a tagged type can be substituted.
+  requireName(name)
+  requireAge(age)
 
-  // (2) A variable of an untagged type can __not__ be substituted on a place where a corresponding tagged type is expected:
+  // (2) Non-automatic upcasting: a variable of an untagged type can __not__ be substituted on a place where a corresponding tagged type is expected:
   requireName(str) // This should not compile, but it does
   requireAge(int) // This should not compile, but it does
 
-  // (3) A variable of a tagged type can be substituted on a place where a corresponding untagged type is expected:
+  // (3) Automatic downcasting: a variable of a tagged type can be substituted on a place where a corresponding untagged type is expected:
   requireString(name)
   requireInt(age)
-
-  // (4) On a place where a tagged type is expected, only a tagged type can be substituted.
-  requireName(name)
-  requireAge(age)
 }
