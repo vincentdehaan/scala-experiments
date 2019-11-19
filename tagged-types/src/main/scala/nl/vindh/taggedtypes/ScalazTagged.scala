@@ -31,6 +31,8 @@ object ScalazTagged extends App {
   //requireString(name) // Does not compile
   //requireInt(age) // Does not compile
 
+  // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
+  // Array(1, 2, 3).map(i => Age(i)) // Does not compile
 
 
   // NOTE: the type inferencer is extremely slow

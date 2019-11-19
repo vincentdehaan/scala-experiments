@@ -34,4 +34,6 @@ object ScalazAutotag extends App {
   requireString(name)
   requireInt(age)
 
+  // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
+  // Array(1, 2, 3).map(i => i: Age) // Does not compile
 }

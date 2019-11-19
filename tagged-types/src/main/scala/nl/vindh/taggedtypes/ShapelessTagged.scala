@@ -28,4 +28,7 @@ object ShapelessTagged extends App {
   // (3) Automatic downcasting: a variable of a tagged type can be substituted on a place where a corresponding untagged type is expected:
   requireString(name)
   println(requireInt(age))
+
+  // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
+  Array(1, 2, 3).map(i => tag[AgeTag][Int](i))
 }

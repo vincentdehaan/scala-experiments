@@ -7,6 +7,7 @@ The goal of this project is to research different ways to implement type tagging
 | Type checking | Yes | Yes | Yes | Yes |
 | Non-automatic upcasting | No | Yes | Yes | Yes |
 | Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes |
+| ClassTag inference | Yes | No | No | Yes |
 | Performance | ? | ? | ? | ? |
 | Type inference in common IDEs (IntelliJ/Eclipse) | ? | ? | ? | ? |
 | Informative compiler errors in case of a type error | ? | ? | ? | ? |
@@ -18,6 +19,8 @@ The goal of this project is to research different ways to implement type tagging
 TODO: https://github.com/softwaremill/scala-common
 
 TODO: extends AnyVal
+
+TODO: look into Scalaz commit 85e1dae0e5c00929328833ce0e41946d7e4ab8cb. It seems something has changed regarding the casting behavior.
 
 ## Tagged types: a definition
 
@@ -46,6 +49,10 @@ val name: Name = "Joe"
 requireString(name)
 ```
 
+(4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
+```scala
+Array(1, 2, 3).map(i => tag(i)) // Does not compile without a ClassTag
+```
 
 
 TODO. Read:
