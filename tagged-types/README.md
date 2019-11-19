@@ -8,7 +8,7 @@ The goal of this project is to research different ways to implement type tagging
 | Non-automatic upcasting | No | Yes | Yes | Yes |
 | Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes |
 | ClassTag inference | Yes | No | No | Yes |
-| Performance | ? | ? | ? | ? |
+| Performance | Baseline | Baseline | Baseline | Slow |
 | Type inference in common IDEs (IntelliJ/Eclipse) | ? | ? | ? | ? |
 | Informative compiler errors in case of a type error | ? | ? | ? | ? |
 | Informative stack traches in case of a runtime error involving a tagged type | ? | ? | ? | ? |
@@ -53,6 +53,21 @@ requireString(name)
 ```scala
 Array(1, 2, 3).map(i => tag(i)) // Does not compile without a ClassTag
 ```
+
+## Performance
+
+Time in ms, averaged over four runs, each time with a fresh JVM:
+ 
+| . | Tag | Untag |
+| --- | --- | --- |
+| Baseline | 191 | 133 |
+| Type alias | 188 | 118 |
+| Scalaz | 194 | 103 |
+| Scalaz + AutoTag | 191 | 102 |
+| Shapeless | 218 | 2612 |
+| Shapeless + explicit downcasting | 212 | 2323 |
+
+
 
 
 TODO. Read:
