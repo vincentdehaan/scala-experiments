@@ -28,3 +28,5 @@ According to commit [efa562bf](https://github.com/scala/scala/commit/efa562bf3c1
 The results above show the following:
 - Specialization leads indeed to a performance advantage.
 - Removal of explicit casting has a negative impact on performance.
+
+SEE https://scalac.io/specialized-generics-object-instantiation/
