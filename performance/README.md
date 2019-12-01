@@ -98,3 +98,33 @@ case xs: Array[AnyRef]  => while (i < len) { ys(i) = f(xs(i).asInstanceOf[AnyRef
 case _: Array[AnyRef]  => while (i < len) { ys(i) = f(xs(i)); i = i+1 }
 ```
 - Another difference is that `map` uses a local variable to store the new array, whereas my previous examples use a class scoped variable, which is implemented by a getter method. It is unclear if this causes a performance difference.
+
+## Studying the JVM
+
+Useful runtime flags:
+
+-XX:+LogCompilation
+-XX:MaxInlineSize=size
+-XX:UnlockDiagnosticVMOptions
+-XX:+PrintCompilation
+-XX:MaxTrivialSize=size
+-XX:+PrintAssembly
+-XX:+PrintInlining
+-XX:LoopUnrollLimit
+-XX:+UseSuperWord
+
+TODO: turn of GC???
+
+See also [https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html](https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html)
+
+See [https://advancedweb.hu/2016/05/27/jvm_jit_optimization_techniques/](https://advancedweb.hu/2016/05/27/jvm_jit_optimization_techniques/)
+
+http://fasihkhatib.com/2018/05/20/JVM-JIT-Loop-Unrolling/
+
+https://web.archive.org/web/20180309233206/https://www.nayuki.io/page/a-fundamental-introduction-to-x86-assembly-programming
+
+http://cr.openjdk.java.net/~vlivanov/talks/2015_JIT_Overview.pdf
+
+https://gist.github.com/retronym/0178c212e4bacffed568
+
+http://jpbempel.blogspot.com/2015/12/printassembly-output-explained.html
