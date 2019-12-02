@@ -101,6 +101,19 @@ case _: Array[AnyRef]  => while (i < len) { ys(i) = f(xs(i)); i = i+1 }
 
 ## Studying the JVM
 
+### Inlining
+
+The JVM inlines short methods. This can be controlled with the `-XX:MaxInlineSize=[size]` and `-XX:FreqInlineSize=[size]` flags. This is demonstrated in `JavaInlining.sh`.
+
+Inlining can be shown by:
+
+```
+> java -XX:+PrintInlining JavaInlining
+...
+@ 23   JavaInlining::add (4 bytes)   inline (hot)
+```
+See [`print_inlining_inner`](https://hg.openjdk.java.net/jdk/jdk/file/d8b5e32ffa2f/src/hotspot/share/compiler/compileTask.cpp#l433) (called by [`print_inlining`](https://hg.openjdk.java.net/jdk/jdk/file/d8b5e32ffa2f/src/hotspot/share/c1/c1_GraphBuilder.cpp#l4315) via [`print_inlining_tty`](https://hg.openjdk.java.net/jdk/jdk/file/d8b5e32ffa2f/src/hotspot/share/compiler/compileTask.hpp#l217)) for an interpretation of the inlining logs.
+
 Useful runtime flags:
 
 -XX:+LogCompilation
@@ -128,3 +141,7 @@ http://cr.openjdk.java.net/~vlivanov/talks/2015_JIT_Overview.pdf
 https://gist.github.com/retronym/0178c212e4bacffed568
 
 http://jpbempel.blogspot.com/2015/12/printassembly-output-explained.html
+
+On installing hsdis: https://chrisseaton.com/truffleruby/jokerconf17/
+
+On loop unrolling: https://blogs.oracle.com/javamagazine/loop-unrolling
