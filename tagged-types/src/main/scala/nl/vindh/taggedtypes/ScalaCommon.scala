@@ -1,15 +1,13 @@
 package nl.vindh.taggedtypes
 
-import io.circe.Codec
-import io.circe._
+import com.softwaremill.tagging.{@@, Tagger}
+import io.circe.{Decoder, Encoder}
 import io.circe.shapes._
-import io.circe.generic.auto._
+import io.circe.generic._
 import org.scalacheck.Arbitrary
-import shapeless.tag
-import shapeless.tag.@@
-import spray.json.DefaultJsonProtocol.jsonFormat2
+import spray.json.DefaultJsonProtocol._
 
-object ShapelessTagged extends App {
+object ScalaCommon extends App {
   trait NameTag
   trait AgeTag
 
@@ -18,8 +16,8 @@ object ShapelessTagged extends App {
   def requireName(n: String @@ NameTag): String = n
   def requireAge(a: Int @@ AgeTag): Int = a
 
-  val name: String @@ NameTag = tag[NameTag][String]("Joe")
-  val age: Int @@ AgeTag = tag[AgeTag][Int](30)
+  val name: String @@ NameTag = "Joe".taggedWith[NameTag]
+  val age: Int @@ AgeTag = 30.taggedWith[AgeTag]
   val str: String = "String"
   val int: Int = 12
 
@@ -36,19 +34,26 @@ object ShapelessTagged extends App {
   println(requireInt(age))
 
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
-  Array(1, 2, 3).map(i => tag[AgeTag][Int](i))
+  Array(1, 2, 3).map(i => i.taggedWith[AgeTag])
 
   // === Library support
 
   // Circe
+  import com.softwaremill.tagging.AnyTypeclassTaggingCompat._
   case class TaggedCaseClass(name: String @@ NameTag, age: Int @@ AgeTag)
-  val circeDecoder = implicitly[Decoder[TaggedCaseClass]]
-  val circeEncoder = implicitly[Encoder[TaggedCaseClass]]
+  implicit val circeDecoderString = implicitly[Decoder[String]]
+  implicit val circeDecoderTaggedString = implicitly[Decoder[String @@ NameTag]]
+  implicit val circeDecoderInt = implicitly[Decoder[Int]]
+  implicit val circeDecoderIntString = implicitly[Decoder[Int @@ AgeTag]]
+  // It is unclear why this does not work, even with the helper implicits above
+  //val circeDecoder = implicitly[Decoder[TaggedCaseClass]] // Does not compile
+  //val circeEncoder = implicitly[Encoder[TaggedCaseClass]] // Does not compile
 
   // Spray
-  // val sprayJsonFormat = jsonFormat2(TaggedCaseClass.apply) // Does not compile
+  val sprayJsonFormat = jsonFormat2(TaggedCaseClass.apply)
 
   // Scalacheck
-  // val arbitraryName = implicitly[Arbitrary[String @@ NameTag]] // Does not compile
-  // val arbitraryAge = implicitly[Arbitrary[Int @@ AgeTag]] // Does not compile
+  val arbitraryName = implicitly[Arbitrary[String @@ NameTag]]
+  val arbitraryAge = implicitly[Arbitrary[Int @@ AgeTag]]
+
 }

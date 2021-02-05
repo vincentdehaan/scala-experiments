@@ -1,5 +1,12 @@
 package nl.vindh.taggedtypes
 
+import io.circe.{Decoder, Encoder}
+import io.circe.shapes._
+import io.circe.generic.auto._
+import org.scalacheck.Arbitrary
+import spray.json.DefaultJsonProtocol._
+import spray.json._
+
 object TypeAlias extends App {
   type Name = String
   type Age = Int
@@ -28,4 +35,18 @@ object TypeAlias extends App {
 
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
   Array(1, 2, 3).map(i => i: Age)
+
+  // === Library support
+
+  // Circe
+  case class TaggedCaseClass(name: Name, age: Age)
+  val circeDecoder = implicitly[Decoder[TaggedCaseClass]]
+  val circeEncoder = implicitly[Encoder[TaggedCaseClass]]
+
+  // Spray
+  val sprayJsonFormat = jsonFormat2(TaggedCaseClass.apply)
+
+  // Scalacheck
+  val arbitraryName = implicitly[Arbitrary[Name]]
+  val arbitraryAge = implicitly[Arbitrary[Age]]
 }

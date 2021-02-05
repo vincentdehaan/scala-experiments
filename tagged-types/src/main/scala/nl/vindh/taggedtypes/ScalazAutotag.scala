@@ -1,6 +1,11 @@
 package nl.vindh.taggedtypes
 
+import io.circe.{Decoder, Encoder}
 import scalaz.{@@, Tag}
+import io.circe.shapes._
+import io.circe.generic.auto._
+import org.scalacheck.Arbitrary
+import spray.json.DefaultJsonProtocol._
 
 object ScalazAutotag extends App {
   sealed trait NameTag
@@ -36,4 +41,18 @@ object ScalazAutotag extends App {
 
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
   // Array(1, 2, 3).map(i => i: Age) // Does not compile
+
+  // === Library support
+
+  // Circe
+  case class TaggedCaseClass(name: String @@ Name, age: Int @@ Age)
+  //val circeDecoder = implicitly[Decoder[TaggedCaseClass]] // Does not compile
+  //val circeEncoder = implicitly[Encoder[TaggedCaseClass]] // Does not compile
+
+  // Spray
+  // val sprayJsonFormat = jsonFormat2(TaggedCaseClass.apply) // Does not compile
+
+  // Scalacheck
+  // val arbitraryName = implicitly[Arbitrary[String @@ Name]] // Does not compile
+  // val arbitraryAge = implicitly[Arbitrary[Int @@ Age]] // Does not compile
 }

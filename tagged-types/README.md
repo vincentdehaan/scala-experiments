@@ -2,23 +2,24 @@ Tagged types in Scala
 ===
 The goal of this project is to research different ways to implement type tagging in Scala. The solutions will be classified according to the following criteria:
 
-| . | type alias | Scalaz | Scalaz + AutoTag | Shapeless |
-| --- | --- | --- | --- | --- |
-| Type checking | Yes | Yes | Yes | Yes |
-| Non-automatic upcasting | No | Yes | Yes | Yes |
-| Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes |
-| ClassTag inference | Yes | No | No | Yes |
-| Performance | Baseline | Baseline | Baseline | Slow |
-| Type inference in common IDEs (IntelliJ/Eclipse) | ? | ? | ? | ? |
-| Informative compiler errors in case of a type error | ? | ? | ? | ? |
-| Informative stack traches in case of a runtime error involving a tagged type | ? | ? | ? | ? |
-| Compatibility with Java | ? | ? | ? | ? |
-| Obfuscation in compiled code: the business logic is not derivable from the class file | ? | ? | ? | ? |
-| Class file size | ? | ? | ? | ? |
+| . | type alias | Scalaz | Scalaz + AutoTag | Shapeless | `@newsubtype` | Scala-common |
+| --- | --- | --- | --- | --- | --- | --- |
+| Type checking | Yes | Yes | Yes | Yes | Yes | Yes |
+| Non-automatic upcasting | No | Yes | No | Yes | Yes | Yes |
+| Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes | Yes | Yes |
+| ClassTag inference | Yes | No | No | Yes | No | Yes |
+| Performance | Baseline | Baseline | Baseline | Slow | ? | ? |
+| Type inference in common IDEs (IntelliJ/Eclipse) | Yes | Yes | Yes | Yes | No | Yes |
+| Informative compiler errors in case of a type error | ? | ? | ? | ? | ? | ? |
+| Informative stack traces in case of a runtime error involving a tagged type | ? | ? | ? | ? | ? | ? |
+| Compatibility with Java | ? | ? | ? | ? | ? | ? |
+| Obfuscation in compiled code: the business logic is not derivable from the class file | ? | ? | ? | ? | ? | ? |
+| Class file size | ? | ? | ? | ? | ? | ? |
+| __Library support__ |
+| Circe: automatic encoder/decoder generation | Yes | No | No | [Yes](https://github.com/circe/circe/pull/1480) | No | No |
+| Spray json: automatic encoder/decoder generation | Yes | No | No | No | No | Yes |
+| ScalaCheck: automatic arbitrary generation | Yes | No | No | [Pending](https://github.com/alexarchambault/scalacheck-shapeless/pull/173) | No | Yes |
 
-TODO: https://github.com/softwaremill/scala-common
-
-TODO: extends AnyVal
 
 TODO: look into Scalaz commit 85e1dae0e5c00929328833ce0e41946d7e4ab8cb. It seems something has changed regarding the casting behavior.
 
