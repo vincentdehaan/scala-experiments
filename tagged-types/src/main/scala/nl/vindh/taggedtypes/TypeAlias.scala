@@ -4,8 +4,10 @@ import io.circe.{Decoder, Encoder}
 import io.circe.shapes._
 import io.circe.generic.auto._
 import org.scalacheck.Arbitrary
+import org.scanamo.DynamoFormat
 import spray.json.DefaultJsonProtocol._
 import spray.json._
+import org.scanamo.auto._
 
 object TypeAlias extends App {
   type Name = String
@@ -36,10 +38,19 @@ object TypeAlias extends App {
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
   Array(1, 2, 3).map(i => i: Age)
 
+  // (5) Pattern matching behaviour
+  name match {
+    case "Joe" => println("Correct pattern matching behaviour")
+    case _ => println("Incorrect pattern matching behaviour")
+  }
+
+  // (6) Regular equality
+  println(s"This should be true: ${name == "Joe"}")
+
   // === Library support
+  case class TaggedCaseClass(name: Name, age: Age)
 
   // Circe
-  case class TaggedCaseClass(name: Name, age: Age)
   val circeDecoder = implicitly[Decoder[TaggedCaseClass]]
   val circeEncoder = implicitly[Encoder[TaggedCaseClass]]
 
@@ -49,4 +60,7 @@ object TypeAlias extends App {
   // Scalacheck
   val arbitraryName = implicitly[Arbitrary[Name]]
   val arbitraryAge = implicitly[Arbitrary[Age]]
+
+  // Scanamo
+  val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]]
 }

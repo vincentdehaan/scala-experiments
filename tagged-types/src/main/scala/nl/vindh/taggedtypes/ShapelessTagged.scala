@@ -5,9 +5,12 @@ import io.circe._
 import io.circe.shapes._
 import io.circe.generic.auto._
 import org.scalacheck.Arbitrary
+import org.scanamo.DynamoFormat
 import shapeless.tag
-import shapeless.tag.@@
+import shapeless.tag._
 import spray.json.DefaultJsonProtocol.jsonFormat2
+import org.scanamo.auto._
+
 
 object ShapelessTagged extends App {
   trait NameTag
@@ -38,10 +41,21 @@ object ShapelessTagged extends App {
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
   Array(1, 2, 3).map(i => tag[AgeTag][Int](i))
 
+  // (5) Pattern matching behaviour
+
+  // name match { // Does not compile
+  //  case "Joe" => println("Correct pattern matching behaviour")
+  //  case _ => println("Incorrect pattern matching behaviour")
+  //}
+
+  // (6) Regular equality
+  println(s"This should be true: ${name == "Joe"}")
+
+
   // === Library support
+  case class TaggedCaseClass(name: String @@ NameTag, age: Int @@ AgeTag)
 
   // Circe
-  case class TaggedCaseClass(name: String @@ NameTag, age: Int @@ AgeTag)
   val circeDecoder = implicitly[Decoder[TaggedCaseClass]]
   val circeEncoder = implicitly[Encoder[TaggedCaseClass]]
 
@@ -51,4 +65,7 @@ object ShapelessTagged extends App {
   // Scalacheck
   // val arbitraryName = implicitly[Arbitrary[String @@ NameTag]] // Does not compile
   // val arbitraryAge = implicitly[Arbitrary[Int @@ AgeTag]] // Does not compile
+
+  // Scanamo
+  // val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]] // Does not compile
 }

@@ -5,7 +5,9 @@ import io.circe.shapes._
 import io.circe.generic._
 import io.estatico.newtype.macros.newsubtype
 import org.scalacheck.Arbitrary
+import org.scanamo.DynamoFormat
 import spray.json.DefaultJsonProtocol._
+import org.scanamo.auto._
 
 object NewType extends App {
   @newsubtype case class Name(str: String)
@@ -36,10 +38,19 @@ object NewType extends App {
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
   //Array(1, 2, 3).map(i => Age(i)) // Does not compile
 
+  // (5) Pattern matching behaviour
+  name match {
+    case "Joe" => println("Correct pattern matching behaviour")
+    case _ => println("Incorrect pattern matching behaviour")
+  }
+
+  // (6) Regular equality
+  println(s"This should be true: ${name == "Joe"}")
+
   // === Library support
+  case class TaggedCaseClass(name: Name, age: Age)
 
   // Circe
-  case class TaggedCaseClass(name: Name, age: Age)
   //val circeDecoder = implicitly[Decoder[TaggedCaseClass]] // Does not compile
   //val circeEncoder = implicitly[Encoder[TaggedCaseClass]] // Does not compile
 
@@ -51,5 +62,8 @@ object NewType extends App {
   // Scalacheck
   // val arbitraryName = implicitly[Arbitrary[Name]] // Does not compile
   // val arbitraryAge = implicitly[Arbitrary[Age]] // Does not compile
+
+  // Scanamo
+  // val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]] // Does not compile
 
 }

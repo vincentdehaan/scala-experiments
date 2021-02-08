@@ -2,12 +2,15 @@ Tagged types in Scala
 ===
 The goal of this project is to research different ways to implement type tagging in Scala. The solutions will be classified according to the following criteria:
 
-| . | type alias | Scalaz | Scalaz + AutoTag | Shapeless | `@newsubtype` | Scala-common |
+| __Semantic properties__ | type alias | Scalaz | Scalaz + AutoTag | Shapeless | `@newsubtype` | Scala-common |
 | --- | --- | --- | --- | --- | --- | --- |
-| Type checking | Yes | Yes | Yes | Yes | Yes | Yes |
-| Non-automatic upcasting | No | Yes | No | Yes | Yes | Yes |
-| Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes | Yes | Yes |
-| ClassTag inference | Yes | No | No | Yes | No | Yes |
+| (1) Type checking | Yes | Yes | Yes | Yes | Yes | Yes |
+| (2) Non-automatic upcasting | No | Yes | No | Yes | Yes | Yes |
+| (3) Automatic downcasting | Yes | No. <br>Requires `asInstanceOf`. | Yes | Yes | Yes | Yes |
+| (4) ClassTag inference | Yes | No | No | Yes | No | Yes |
+| (5) Pattern matching | Yes | Yes | Yes | No | Yes | No |
+| (6) Regular equality | Yes | Yes | Yes | Yes | Yes | Yes |
+| __Other properties__ | __type alias__ | __Scalaz__ | __Scalaz + AutoTag__ | __Shapeless__ | __`@newsubtype`__ | __Scala-common__ |
 | Performance | Baseline | Baseline | Baseline | Slow | ? | ? |
 | Type inference in common IDEs (IntelliJ/Eclipse) | Yes | Yes | Yes | Yes | No | Yes |
 | Informative compiler errors in case of a type error | ? | ? | ? | ? | ? | ? |
@@ -15,11 +18,11 @@ The goal of this project is to research different ways to implement type tagging
 | Compatibility with Java | ? | ? | ? | ? | ? | ? |
 | Obfuscation in compiled code: the business logic is not derivable from the class file | ? | ? | ? | ? | ? | ? |
 | Class file size | ? | ? | ? | ? | ? | ? |
-| __Library support__ |
+| __Library support__ | __type alias__ | __Scalaz__ | __Scalaz + AutoTag__ | __Shapeless__ | __`@newsubtype`__ | __Scala-common__ |
 | Circe: automatic encoder/decoder generation | Yes | No | No | [Yes](https://github.com/circe/circe/pull/1480) | No | No |
 | Spray json: automatic encoder/decoder generation | Yes | No | No | No | No | Yes |
 | ScalaCheck: automatic arbitrary generation | Yes | No | No | [Pending](https://github.com/alexarchambault/scalacheck-shapeless/pull/173) | No | Yes |
-
+| Scanamo: automatic format generation | Yes | No | No | No | No | No |
 
 TODO: look into Scalaz commit 85e1dae0e5c00929328833ce0e41946d7e4ab8cb. It seems something has changed regarding the casting behavior.
 
@@ -53,6 +56,20 @@ requireString(name)
 (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
 ```scala
 Array(1, 2, 3).map(i => tag(i)) // Does not compile without a ClassTag
+```
+
+(5) Pattern matching is possible.
+
+```scala
+name match {
+  case "Joe" => println("This is correct behaviour")
+  case _ => println("This is incorrect, but it compiles.")
+}
+```
+
+(6) Regular equality.
+```scala
+println(s"This should be true: ${name == "Joe"}")
 ```
 
 ## Performance

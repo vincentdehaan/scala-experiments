@@ -5,7 +5,9 @@ import io.circe.{Decoder, Encoder}
 import io.circe.shapes._
 import io.circe.generic._
 import org.scalacheck.Arbitrary
+import org.scanamo.DynamoFormat
 import spray.json.DefaultJsonProtocol._
+import org.scanamo.auto._
 
 object ScalaCommon extends App {
   trait NameTag
@@ -36,11 +38,20 @@ object ScalaCommon extends App {
   // (4) `ClassTag` inference: the compiler is able to find a suitable `ClassTag` for the type.
   Array(1, 2, 3).map(i => i.taggedWith[AgeTag])
 
+  // (5) Pattern matching behaviour
+  // name match { // Does not compile
+  //   case "Joe" => println("Correct pattern matching behaviour")
+  //   case _ => println("Incorrect pattern matching behaviour")
+  // }
+
+  // (6) Regular equality
+  println(s"This should be true: ${name == "Joe"}")
+
   // === Library support
+  case class TaggedCaseClass(name: String @@ NameTag, age: Int @@ AgeTag)
+  import com.softwaremill.tagging.AnyTypeclassTaggingCompat._
 
   // Circe
-  import com.softwaremill.tagging.AnyTypeclassTaggingCompat._
-  case class TaggedCaseClass(name: String @@ NameTag, age: Int @@ AgeTag)
   implicit val circeDecoderString = implicitly[Decoder[String]]
   implicit val circeDecoderTaggedString = implicitly[Decoder[String @@ NameTag]]
   implicit val circeDecoderInt = implicitly[Decoder[Int]]
@@ -55,5 +66,8 @@ object ScalaCommon extends App {
   // Scalacheck
   val arbitraryName = implicitly[Arbitrary[String @@ NameTag]]
   val arbitraryAge = implicitly[Arbitrary[Int @@ AgeTag]]
+
+  // Scanamo
+  // val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]] // Does not compile
 
 }
