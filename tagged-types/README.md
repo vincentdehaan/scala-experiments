@@ -10,6 +10,7 @@ The goal of this project is to research different ways to implement type tagging
 | (4) ClassTag inference | Yes | No | No | Yes | No | Yes |
 | (5) Pattern matching | Yes | Yes | Yes | No | Yes | No |
 | (6) Regular equality | Yes | Yes | Yes | Yes | Yes | Yes |
+| (7) Built-in type classes | E, O, N | E | E | E, O | E, O | E, O | 
 | __Other properties__ | __type alias__ | __Scalaz__ | __Scalaz + AutoTag__ | __Shapeless__ | __`@newsubtype`__ | __Scala-common__ |
 | Performance | Baseline | Baseline | Baseline | Slow | ? | ? |
 | Type inference in common IDEs (IntelliJ/Eclipse) | Yes | Yes | Yes | Yes | No | Yes |
@@ -70,6 +71,13 @@ name match {
 (6) Regular equality.
 ```scala
 println(s"This should be true: ${name == "Joe"}")
+```
+
+(7) Built-in type classes
+```scala
+val equiv = implicitly[Equiv[Age]] // E
+val ordering = implicitly[Ordering[Age]] // O
+val numeric = implicitly[Numeric[Age]](IntIsIntegral) // N
 ```
 
 ## Performance

@@ -9,6 +9,8 @@ import spray.json.DefaultJsonProtocol._
 import spray.json._
 import org.scanamo.auto._
 
+import scala.math.Numeric.IntIsIntegral
+
 object TypeAlias extends App {
   type Name = String
   type Age = Int
@@ -46,6 +48,11 @@ object TypeAlias extends App {
 
   // (6) Regular equality
   println(s"This should be true: ${name == "Joe"}")
+
+  // (7) Built-in type classes
+  val equiv = implicitly[Equiv[Age]]
+  val ordering = implicitly[Ordering[Age]]
+  val numeric = implicitly[Numeric[Age]](IntIsIntegral)
 
   // === Library support
   case class TaggedCaseClass(name: Name, age: Age)

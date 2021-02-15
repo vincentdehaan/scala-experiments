@@ -11,6 +11,8 @@ import shapeless.tag._
 import spray.json.DefaultJsonProtocol.jsonFormat2
 import org.scanamo.auto._
 
+import scala.math.Numeric.IntIsIntegral
+
 
 object ShapelessTagged extends App {
   trait NameTag
@@ -50,6 +52,11 @@ object ShapelessTagged extends App {
 
   // (6) Regular equality
   println(s"This should be true: ${name == "Joe"}")
+
+  // (7) Built-in type classes
+  val equiv = implicitly[Equiv[Int @@ AgeTag]]
+  val ordering = implicitly[Ordering[Int @@ AgeTag]]
+  //val numeric = implicitly[Numeric[Int @@ AgeTag]]
 
 
   // === Library support

@@ -47,6 +47,11 @@ object NewType extends App {
   // (6) Regular equality
   println(s"This should be true: ${name == "Joe"}")
 
+  // (7) Built-in type classes
+  val equiv = implicitly[Equiv[Age]]
+  val ordering = implicitly[Ordering[Age]]
+  //val numeric = implicitly[Numeric[Age]]
+
   // === Library support
   case class TaggedCaseClass(name: Name, age: Age)
 
