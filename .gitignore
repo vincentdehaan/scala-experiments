@@ -3,3 +3,5 @@
 .idea
 target/
 *.tmp
+.metals/
+.vscode/
