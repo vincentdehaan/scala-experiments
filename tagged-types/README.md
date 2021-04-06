@@ -24,6 +24,7 @@ The goal of this project is to research different ways to implement type tagging
 | Spray json: automatic encoder/decoder generation | Yes | No | No | No | No | Yes | No |
 | ScalaCheck: automatic arbitrary generation | Yes | No | No | [Pending](https://github.com/alexarchambault/scalacheck-shapeless/pull/173) | No | Yes | No |
 | Scanamo: automatic format generation | Yes | No | No | No | No | No | No |
+| Cormorant: csv writing and parsing | Yes | No| No | [Pending](https://github.com/davenverse/cormorant/pull/423) | No | No | No |
 
 TODO: look into Scalaz commit 85e1dae0e5c00929328833ce0e41946d7e4ab8cb. It seems something has changed regarding the casting behavior.
 

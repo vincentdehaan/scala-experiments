@@ -16,5 +16,8 @@ libraryDependencies += "com.github.alexarchambault" %% "scalacheck-shapeless_1.1
 libraryDependencies += "io.spray" %% "spray-json" % "1.3.6"
 libraryDependencies += "org.scanamo" %% "scanamo" % "1.0.0-M11"
 libraryDependencies += "org.scanamo" %% "scanamo-formats" % "1.0.0-M11"
+libraryDependencies += "io.chrisdavenport" %% "cormorant-core" % "0.3.0"
+libraryDependencies += "io.chrisdavenport" %% "cormorant-generic" % "0.3.0"
+libraryDependencies += "io.chrisdavenport" %% "cormorant-parser" % "0.3.0"
 
 scalacOptions += "-Ymacro-annotations"

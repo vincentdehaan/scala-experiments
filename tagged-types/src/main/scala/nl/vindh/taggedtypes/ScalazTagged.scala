@@ -1,5 +1,8 @@
 package nl.vindh.taggedtypes
 
+import io.chrisdavenport.cormorant._
+import io.chrisdavenport.cormorant.generic.semiauto._
+import io.chrisdavenport.cormorant.implicits._
 import io.circe.{Decoder, Encoder}
 import scalaz.{@@, Tag}
 import io.circe.generic._
@@ -73,4 +76,8 @@ object ScalazTagged extends App {
 
   // Scanamo
   // val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]] // Does not compile
+
+  // Cormorant
+  // val lw: LabelledWrite[TaggedCaseClass] = deriveLabelledWrite // Does not compile
+  // val lr: LabelledRead[TaggedCaseClass] = deriveLabelledRead // Does not compile
 }

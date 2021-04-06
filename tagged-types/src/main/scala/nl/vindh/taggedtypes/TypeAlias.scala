@@ -1,8 +1,12 @@
 package nl.vindh.taggedtypes
 
+import io.chrisdavenport.cormorant._
+import io.chrisdavenport.cormorant.generic.semiauto._
+import io.chrisdavenport.cormorant.implicits._
 import io.circe.{Decoder, Encoder}
 import io.circe.shapes._
 import io.circe.generic.auto._
+import nl.vindh.taggedtypes.ScalazTagged.TaggedCaseClass
 import org.scalacheck.Arbitrary
 import org.scanamo.DynamoFormat
 import spray.json.DefaultJsonProtocol._
@@ -70,4 +74,8 @@ object TypeAlias extends App {
 
   // Scanamo
   val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]]
+
+  // Cormorant
+  val lw: LabelledWrite[TaggedCaseClass] = deriveLabelledWrite
+  val lr: LabelledRead[TaggedCaseClass] = deriveLabelledRead
 }

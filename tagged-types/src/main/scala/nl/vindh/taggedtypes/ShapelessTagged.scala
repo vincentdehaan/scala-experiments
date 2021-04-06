@@ -1,9 +1,12 @@
 package nl.vindh.taggedtypes
 
+import io.chrisdavenport.cormorant.{LabelledRead, LabelledWrite}
+import io.chrisdavenport.cormorant.generic.semiauto._
 import io.circe.Codec
 import io.circe._
 import io.circe.shapes._
 import io.circe.generic.auto._
+import nl.vindh.taggedtypes.ScalazTagged.TaggedCaseClass
 import org.scalacheck.Arbitrary
 import org.scanamo.DynamoFormat
 import shapeless.tag
@@ -75,4 +78,8 @@ object ShapelessTagged extends App {
 
   // Scanamo
   // val scanamoFormat = implicitly[DynamoFormat[TaggedCaseClass]] // Does not compile
+
+  // Cormorant
+  // val lw: LabelledWrite[TaggedCaseClass] = deriveLabelledWrite // Does not compile
+  // val lr: LabelledRead[TaggedCaseClass] = deriveLabelledRead // Does not compile
 }
